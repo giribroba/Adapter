@@ -13,8 +13,15 @@ namespace Adapter
 
         public void PreencherCbb()
         {
+            #region Sem Adapter
             Aparelho_cbb.Items.Add(new Lavadora());
             Aparelho_cbb.Items.Add(new Fatiadora());
+            #endregion
+
+            #region Com Adapter
+            //Aparelho_cbb.Items.Add(new AdaptLavadora());
+            //Aparelho_cbb.Items.Add(new AdaptFatiadora());
+            #endregion
         }
         private void Ligar_btn_Click(object sender, EventArgs e)
         {
@@ -32,8 +39,8 @@ namespace Adapter
             }
             #endregion
 
-            #region Com Adapter;
-            //IAparelho aparelho = new Adapter(Aparelho_cbb.SelectedItem);
+            #region Com Adapter
+            //var aparelho = (IAparelho)Aparelho_cbb.SelectedItem;
             //acao_lbl.Text = aparelho.Ligar();
             #endregion
         }
@@ -46,30 +53,19 @@ namespace Adapter
         string Ligar();
     }
 
-    class Adapter : IAparelho
+    class AdaptFatiadora : Fatiadora , IAparelho
     {
-        object aparelho;
-        public Adapter(object aparelho)
-        {
-            this.aparelho = aparelho;
-        }
-
         public string Ligar()
         {
-            switch (aparelho.GetType().ToString())
-            {
-                case "Adapter.Fatiadora":
-                    var fatia = (Fatiadora)aparelho;
-                    return fatia.Fatiar();
-                    break;
-                case "Adapter.Lavadora":
-                    var lava = (Lavadora)aparelho;
-                    return lava.Lavar();
-                    break;
-            }
+            return this.Fatiar();
+        }
+    }
 
-            return "Aparelho incompatível";
-
+    class AdaptLavadora : Lavadora , IAparelho
+    {
+        public string Ligar()
+        {
+            return this.Lavar();
         }
     }
     #endregion
